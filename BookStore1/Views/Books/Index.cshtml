@@ -1,0 +1,69 @@
+﻿@model BookStore1.ViewModels.BooksFiltersViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Books</h1>
+
+@if(User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <p class="create">
+        <button class="add"><a asp-action="Create">Create New</a></button>
+    </p>
+}
+<form asp-controller="Books" asp-action="Index" method="get">
+    <div class="form-group">
+        <input type="text" asp-for="SearchString" class="search1" placeholder="Search by author, genre or book title..." />
+        <input type="submit" value="Filter" class="search" />
+    </div>
+    <br>
+</form>
+@foreach (var item in Model.Books)
+{
+    <div class="card-group booksIndex">
+        <div class="card">
+            <img class="card-img-top" src="@Html.DisplayFor(modelItem => item.FrontPage)" alt="Book Front Page" height="400px" width="250px">
+            <div class="card-body">
+                <h5 class="card-title">
+                    @Html.DisplayFor(modelItem => item.Title)
+                </h5>
+                <p class="card-text">
+                    @Html.DisplayFor(modelItem => item.Description)
+                </p>
+                <p class="card-text">
+                    @Html.DisplayNameFor(modelItem => item.YearPublished):
+                    @Html.DisplayFor(modelItem => item.YearPublished)
+                </p>
+                <p class="card-text">
+                    @Html.DisplayNameFor(modelItem => item.Genres) :
+                    @if (Model.Books != null)
+                    {
+                        var allGenres = item.Genres
+                        .Select(bg => bg.Genre)
+                        .Distinct();
+
+                        foreach (var genre in allGenres)
+                        {
+                            <a class="genrename" asp-controller="Genres" asp-action="Details" asp-route-id="@genre.Id">@genre.GenreName</a>
+                        }
+                    }
+                </p>
+            </div>
+            <div class="buttons">
+                 @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                 { 
+                    <button class="edit"><a asp-action="Edit" asp-route-id="@item.Id">Edit</a> </button>
+                 } 
+                <button class="details"><a asp-action="Details" asp-route-id="@item.Id">Details</a> </button>
+                 @if (User.Identity.IsAuthenticated && User.IsInRole("Admin")) { 
+                    <button class="delete"><a asp-action="Delete" asp-route-id="@item.Id">Delete</a></button>
+                 }
+                @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
+                {
+                    <button class="add"><a asp-controller="MyBooks" asp-action="Index">Buy book</a></button>
+                }
+                </div>
+        </div>
+    </div>
+}

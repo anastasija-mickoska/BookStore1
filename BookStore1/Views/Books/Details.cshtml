@@ -1,0 +1,90 @@
+﻿@model BookStore1.Models.Book
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <hr />
+    <div class="card">
+        <div class="card-body bookdetails1">
+            <div class="bookNamePhoto">
+                <div class="name_book">
+                    <h5 class="card-title">
+                        @Html.DisplayFor(model => model.Title)
+                    </h5>
+                </div>
+                <div class="frontpage_details">
+                    <img class="frontpage" height="300px" src="@Html.DisplayFor(model => model.FrontPage)" />
+                </div>
+            </div>
+            <div class="info">
+                <p class="card-text">
+                    <strong>@Html.DisplayNameFor(model => model.YearPublished):</strong>
+                    @Html.DisplayFor(model => model.YearPublished)
+                </p>
+                <p class="card-text">
+                    <strong>@Html.DisplayNameFor(model => model.Description):</strong>
+                    @Html.DisplayFor(model => model.Description)
+                </p>
+                <p class="card-text">
+                    <strong>@Html.DisplayNameFor(model => model.NumPages):</strong>
+                    @Html.DisplayFor(model => model.NumPages) 
+                </p>
+                <p class="card-text">
+                    <strong>@Html.DisplayNameFor(model => model.Publisher):</strong>
+                    @Html.DisplayFor(model => model.Publisher)
+                </p>
+                @if(User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("User"))) {
+                    <p class="card-text">
+                        <strong>@Html.DisplayNameFor(model => model.DownloadUrl):</strong>
+                        <a class="bookdetails" href="@Html.DisplayFor(model => model.DownloadUrl)">@Html.DisplayFor(model => model.DownloadUrl)</a>
+                    </p>
+                }
+                <p class="card-text">
+                    <strong>@Html.DisplayNameFor(model => model.Genres)</strong>
+                    @if (Model.Genres != null)
+                    {
+                        foreach (var genre in Model.Genres)
+                        {
+                            <a class="genrename" asp-controller="Genres" asp-action="Details" asp-route-id="@genre.GenreId">@genre.Genre.GenreName</a> 
+                        }
+                    }
+                </p>
+                <p class="card-text">
+                    <strong>@Html.DisplayNameFor(model => model.Author)</strong>
+                    @if (Model.AuthorId != null)
+                    {
+                        <a class="authorname" asp-controller="Authors" asp-action="Details" asp-route-id="@Model.AuthorId">@Html.DisplayFor(model => model.Author.FullName)</a>
+                    }
+                </p>
+                <p class="card-text">
+                    <strong>Average rating:</strong>
+                    @if (ViewData["AverageRating"] != null)
+                    {
+                    @(ViewData["AverageRating"] as double?)
+                    }                
+                 </p>
+                <p class="card-text">
+                    <strong>@Html.DisplayNameFor(model => model.Reviews):</strong>
+                    @if (Model.Reviews != null)
+                    {
+                        @foreach (var review in Model.Reviews)
+                        {
+                            <li class="comments">@review.Comment</li>
+                        }
+                    }
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        <button class="edit"><a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a></button>
+    }    
+    <button class="back"><a asp-action="Index">Back to List</a></button>
+</div>

@@ -1,0 +1,96 @@
+﻿@model BookStore1.Models.Book
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="left">
+                <div class="form-group">
+                    <strong><label asp-for="Title" class="control-label"></label></strong>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <strong><label asp-for="YearPublished" class="control-label"></label></strong>
+                    <input asp-for="YearPublished" class="form-control" />
+                    <span asp-validation-for="YearPublished" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <strong><label asp-for="NumPages" class="control-label"></label></strong>
+                    <input asp-for="NumPages" class="form-control" />
+                    <span asp-validation-for="NumPages" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <strong><label asp-for="Description" class="control-label"></label></strong>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <strong><label asp-for="Publisher" class="control-label"></label></strong>
+                    <input asp-for="Publisher" class="form-control" />
+                    <span asp-validation-for="Publisher" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="right">
+                <div class="form-group">
+                    <strong><label asp-for="FrontPage" class="control-label"></label></strong>
+                    <input asp-for="FrontPage" class="form-control" />
+                        <input type="file" class="form-control-file" id="fileInput" name="file">
+                        <button type="submit" class="search">Upload</button>
+                    <span asp-validation-for="FrontPage" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <strong><label asp-for="DownloadUrl" class="control-label"></label></strong>
+                    <input asp-for="DownloadUrl" class="form-control" />
+                       <input type="file" class="form-control-file" id="fileInput" name="file">
+                        <button type="submit" class="search">Upload</button>
+                    <span asp-validation-for="DownloadUrl" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <strong><label asp-for="Author" class="control-label"></label></strong>
+                    <select asp-for="AuthorId" class="form-control" asp-items="ViewBag.AuthorId">
+                        <option value="">Select</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <strong><label class="control-label">Genres</label></strong>
+                    <select asp-for="Genres" class="form-control" asp-items="ViewBag.Genres" multiple>
+                        <option value="">Select</option>
+                    </select>
+                </div>
+@*                 <div class="form-group">
+                    <strong><label class="control-label">Genres</label></strong>
+                    <br />
+                    @if (ViewBag.Genres != null)
+                    {
+                        foreach (var genre in ViewBag.Genres)
+                        {
+                            var genreID = Convert.ToInt16(genre.Value);
+                            bool isChecked = ViewBag.BookGenres.Contains(genreID);
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="selectedGenres" value="@genre.Value" @(isChecked ? "checked" : "") /> @genre.Text
+                                </label>
+                            </div>
+                        }
+                    }
+                </div> *@
+                <br />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="add" />
+                <button class="back"><a asp-action="Index">Back to List</a></button>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

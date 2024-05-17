@@ -1,0 +1,245 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    background-color: #F0EADE;
+}
+.display-4 {
+    margin-top: 20%;
+    margin-bottom: 20%;
+    letter-spacing:3px;
+}
+footer {
+    position:absolute:
+    bottom:0;
+}
+nav .navbar {
+    height: 120px;
+}
+.nav-item, .navbar-brand {
+    margin-left: 3%;
+    margin-right: 3%;
+    font-size: 1.5em;
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+.navbar {
+    padding: 2%;
+}
+.edit, .details, .delete, .back, .add, .search {
+    border: none;
+    padding: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    color: white;
+    border-radius: 5px;
+}
+a {
+    text-decoration: none;
+    padding:20px;
+    color:white;
+}
+a:hover {
+    color:black;
+}
+.edit, btn-primary, .search, .details {
+    background-color: #75937e;
+    color: white;
+    border-radius: 5px;
+}
+.add {
+    background-color:#75937e;
+}
+.delete, btn-danger {
+    background-color: rgb(212, 90, 90);
+}
+.back {
+    background-color: #898f8b;
+}
+h4 {
+    margin-left:20px;
+}
+.info, .name {
+    width: 22%;
+    float: left;
+    margin-right:3%;
+}
+.buttons{
+    position:relative;
+    width:100%;
+    float:left;
+    padding:5px;
+}
+.buttons1 {
+    width:40%;
+    float:right;
+}
+.create {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.search1 {
+    width:50%;
+    border:0.5px solid lightgrey;
+    border-radius:5px;
+    padding:10px;
+    margin-left:10px;
+}
+input .add, back {
+    float:left;
+}
+.card-img-top {
+    position:relative;
+    width:100%
+    height:100%;
+    border-radius:15px 15px 0 0;
+}
+.card-group {
+    width:30%;
+    float:left;
+    margin-left:3%;
+    margin-bottom:5%;
+}
+.card {
+    border-radius:15px;
+}
+.booksIndex {
+    height:800px;
+}
+.reviewIndex {
+    height:250px;
+}
+.genres {
+    width:90%;
+}
+.card-body {
+    padding:30px;
+    border-radius:20px;
+}
+.authorname, .genrename,.bookdetails {
+    color:black;
+}
+.books {
+    width:40%;
+    float:left;
+}
+.books_details {
+    width:50%;
+    float:right;
+}
+.booksauthors {
+    position:relative;
+    height:100%;
+}
+.booksauthors {
+    width:30%;
+    box-shadow:2px 3px 5px grey;
+    float:left;
+    border-radius:5px;
+    margin-right:20px;
+    padding:20px;
+    height:250px;
+}
+.nav-item {
+    list-style-type:none;
+}
+#register, #login {
+    float:left;
+}
+.frontpage_details {
+    width:60%;
+    margin-right:20%;
+    margin-left:5%;
+}
+.frontpage_details img {
+        border-radius:10px;
+        position:relative;
+        height:100%;
+        width:100%;
+ }
+.bookdetails1 {
+    width:100%;
+}
+.name h5 {
+    font-size:32px;
+}
+.name_book {
+    width: 100%;
+    margin-bottom: 2%;
+    margin-right: 5%;
+    margin-left:5%;
+    float: left;
+}
+.card-text {
+    font-size:16px;
+}
+.card-title {
+    font-size:32px;
+}
+.info {
+    width:40%;
+    float:left;
+}
+.left, .right {
+    float:left;
+    width:45%;
+    margin-right:2.5%;
+    margin-left:2.5%;
+}
+.col-md-4 {
+    width:100%;
+}
+label {
+    font-size:18px;
+    padding:5px;
+}
+.name_author {
+    margin-bottom:5%;
+    width:40%;
+}
+.books_details{
+    width:50%;
+    float:left;
+}
+.comments{
+    font-size:16px;
+}
+#register, #forgot-password, #resend-confirmation {
+    color:black;
+}
+#registerSubmit, #update, #change, #update-profile-button {
+    background-color: #75937e;
+    border: none;
+}
+#change:hover, #registerSubmit:hover, #update:hover, #update-profile-button:hover {
+    background-color: #6e8676;
+}
+#logout {
+    font-size:24px;
+    padding-top:15px;
+}
+.bookNamePhoto {
+    width:40%;
+    margin-right:5%;
+    float:left;
+}

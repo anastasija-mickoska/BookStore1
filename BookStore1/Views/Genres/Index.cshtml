@@ -1,0 +1,38 @@
+﻿@model IEnumerable<BookStore1.Models.Genre>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Genres</h1>
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+<p class="create">
+    <button class="add"><a asp-action="Create">Create New</a></button>
+</p>    
+}
+@foreach (var item in Model)
+{
+    <div class="card-group genres">
+        <div class="card">
+            <div class="card-body">
+                <div class="name">
+                    <h3 class="card-title">
+                        @Html.DisplayFor(modelItem => item.GenreName)
+                    </h3>
+                </div>
+                <div class="buttons1">
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <button class="edit"><a asp-action="Edit" asp-route-id="@item.Id">Edit</a> </button>
+                    }
+                    <button class="details"><a asp-action="Details" asp-route-id="@item.Id">Details</a> </button>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <button class="delete"><a asp-action="Delete" asp-route-id="@item.Id">Delete</a></button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}

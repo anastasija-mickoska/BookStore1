@@ -1,0 +1,39 @@
+﻿@model BookStore1.Models.Author
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<div>
+    <div class="card">
+        <div class="card-body">
+            <div class="name_author">
+                <h5 class="card-title">
+                    @Html.DisplayFor(model => model.FullName)
+                </h5>
+            </div>
+            <div class="info">
+                <p class="card-text">
+                    <strong>@Html.DisplayNameFor(model => model.BirthDate) :</strong>
+                    @Html.DisplayFor(model => model.BirthDate)
+                </p>
+                <p class="card-text">
+                    <strong>@Html.DisplayNameFor(model => model.Nationality) :</strong>
+                    @Html.DisplayFor(model => model.Nationality)
+                </p>
+                <p class="card-text">
+                    <strong>@Html.DisplayNameFor(model => model.Gender) :</strong>
+                    @Html.DisplayFor(model => model.Gender)
+                </p>
+            </div>
+        </div>
+    </div>    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <h4>Are you sure you want to delete this?</h4>
+        <input type="submit" value="Delete" class="delete" /> 
+        <button class="back"><a asp-action="Index">Back to List</a></button>
+    </form>
+</div>

@@ -1,0 +1,56 @@
+﻿@model IEnumerable<BookStore1.ViewModels.AuthorBookViewModel>
+
+@{
+    ViewData["Title"] = "Authors";
+}
+
+<h1>Authors</h1>
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <p class="create">
+        <button class="add"><a asp-action="Create">Add an Author</a></button>
+    </p>
+}
+<form asp-controller="Authors" asp-action="Index" method="get">
+    <div class="form-group">
+        <input type="text" name="searchString" class="search1" placeholder="Search by first or last name..." />
+        <input type="submit" value="Filter" class="search" />
+    </div>
+    <br>
+</form>
+@foreach (var item in Model) {
+    <div class="card">
+        <div class="card-body">
+            <div class="name">
+                <h5 class="card-title">
+                    @Html.DisplayFor(modelItem => item.Author.FullName)
+                </h5>
+            </div>
+            <div class="info">
+                <p class="card-text">
+                    <strong>@Html.DisplayNameFor(modelItem => item.Author.BirthDate):</strong>
+                    @Html.DisplayFor(modelItem => item.Author.BirthDate)
+                </p>
+                <p class="card-text">
+                    <strong>@Html.DisplayNameFor(modelItem => item.Author.Nationality):</strong>
+                    @Html.DisplayFor(modelItem => item.Author.Nationality)
+                </p>
+                <p class="card-text">
+                    <strong>@Html.DisplayNameFor(modelItem => item.Author.Gender):</strong>
+                    @Html.DisplayFor(modelItem => item.Author.Gender)
+                </p>
+            </div>
+            <div class="buttons1">
+                 @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                { 
+                    <button class="edit"><a asp-action="Edit" asp-route-id="@item.Author.Id">Edit</a></button> 
+                } 
+                <button class="details"><a asp-action="Details" asp-route-id="@item.Author.Id">Details</a></button>
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    <button class="delete"><a asp-action="Delete" asp-route-id="@item.Author.Id">Delete</a></button>
+                }
+            </div>
+        </div>
+    </div>
+}

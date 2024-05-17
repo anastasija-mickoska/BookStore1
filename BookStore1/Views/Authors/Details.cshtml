@@ -1,0 +1,67 @@
+﻿@model BookStore1.ViewModels.AuthorBookViewModel
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <hr />
+    <div class="card">
+        <div class="card-body">
+            <div class="name_author">
+                <h5 class="card-title">
+                    @Html.DisplayFor(model => model.Author.FullName)
+                </h5>
+            </div>
+            <div class="info">
+                <p class="card-text">
+                    <strong>@Html.DisplayNameFor(model => model.Author.BirthDate) :</strong>
+                    @Html.DisplayFor(model => model.Author.BirthDate)
+                </p>
+                <p class="card-text">
+                    <strong>@Html.DisplayNameFor(model => model.Author.Nationality) :</strong>
+                    @Html.DisplayFor(model => model.Author.Nationality)
+                </p>
+                <p class="card-text">
+                    <strong>@Html.DisplayNameFor(model => model.Author.Gender) :</strong>
+                    @Html.DisplayFor(model => model.Author.Gender)
+                </p>
+            </div>
+            <div class="books_details">
+                @if (Model.BooksByAuthor != null && Model.BooksByAuthor.Any())
+                {
+                    @foreach (var book in Model.BooksByAuthor)
+                    {
+                        <a class="bookdetails" asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">
+                            <div class="booksauthors">
+                                <strong><p>@book.Title</p></strong>
+                                <p>Genre: @book.Genres.FirstOrDefault()?.Genre.GenreName</p>
+                                @if (book.Reviews != null)
+                                {
+                                    <p>Reviews:</p>
+                                    <ul>
+                                        @foreach (var review in book.Reviews)
+                                        {
+                                            <li>@review.Comment</li>
+                                        }
+                                    </ul>
+                                }
+                            </div>
+                        </a>
+                    }
+                }
+                else
+                {
+                    <p>No books found by this author.</p>
+                }
+            </div>
+
+        </div>
+    </div>
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        <button class="edit"><a asp-action="Edit" asp-route-id="@Model?.Author.Id">Edit</a></button>
+    }
+    <button class="back"><a asp-action="Index">Back to List</a></button>
+</div>
