@@ -56,7 +56,12 @@ namespace BookStore1.Data
             .HasOne<Book>(p => p.Book)
             .WithMany(p => p.Users)
             .HasForeignKey(p => p.BookId);
+
+            builder.Entity<UserBooks>()
+            .HasOne(p => p.User)
+            .WithMany(p => p.Books)
+            .HasForeignKey(p => p.AppUser);
+
         } 
-        public DbSet<BookStore1.Models.MyBooks> MyBooks { get; set; } = default!;
     }
 }

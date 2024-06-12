@@ -39,12 +39,14 @@
             </div>
             <div class="form-group">
                 <label asp-for="FrontPage" class="control-label"></label>
-                <input asp-for="FrontPage" class="form-control" />
+                <input type="file" class="form-control-file" id="fileInput" name="file">
+                <button type="submit" class="search">Upload</button>
                 <span asp-validation-for="FrontPage" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DownloadUrl" class="control-label"></label>
-                <input asp-for="DownloadUrl" class="form-control" />
+                <input type="file" class="form-control-file" id="fileInput" name="file">
+                <button type="submit" class="search">Upload</button>
                 <span asp-validation-for="DownloadUrl" class="text-danger"></span>
             </div>
             <div class="form-group">

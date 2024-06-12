@@ -1,0 +1,44 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using BookStore1.Areas.Identity.Data
+@inject UserManager<BookStore1User> UserManager
+@model BookStore1.ViewModels.CreateReviewViewModel
+@{
+
+    <h1>Create</h1>
+
+    <h4>Review</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="CreateReview">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="BoughtBooks">Select a Book</label>
+                    <select asp-for="Review.BookId" asp-items="Model.BoughtBooks" class="form-control">
+                    <option value="">Select</option>
+                    </select>
+                </div>
+                    <div class="form-group">
+                        <label asp-for="Review.AppUser" class="control-label"></label>
+                        <input asp-for="Review.AppUser" class="form-control" value="@UserManager.GetUserName(User)"/>
+                        <span asp-validation-for="Review.AppUser" class="text-danger"></span>
+                    </div>
+                <div class="form-group">
+                    <label asp-for="Review.Comment" class="control-label"></label>
+                    <input asp-for="Review.Comment" class="form-control" />
+                    <span asp-validation-for="Review.Comment" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Review.Rating" class="control-label"></label>
+                    <input asp-for="Review.Rating" class="form-control" />
+                    <span asp-validation-for="Review.Rating" class="text-danger"></span>
+                </div>
+                <br />
+                <div class="form-group">
+                    <input type="submit" value="Create" class="add" />
+                    <button class="back"><a asp-action="Index">Back to List</a></button>
+                </div>
+            </form>
+        </div>
+    </div>
+}

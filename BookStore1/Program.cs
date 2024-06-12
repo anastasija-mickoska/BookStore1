@@ -10,8 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<BookStore1Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("BookStore1Context") ?? throw new InvalidOperationException("Connection string 'BookStore1Context' not found.")));
 
-builder.Services.AddTransient<MyBooks>();
-
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
     options.CheckConsentNeeded = context => true;

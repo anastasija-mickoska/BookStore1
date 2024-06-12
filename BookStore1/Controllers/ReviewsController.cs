@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookStore1.Data;
 using BookStore1.Models;
+using BookStore1.ViewModels;
+using BookStore1.Areas.Identity.Data;
 
 namespace BookStore1.Controllers
 {
@@ -68,8 +70,46 @@ namespace BookStore1.Controllers
                 return RedirectToAction(nameof(Index));
             }
             var books = _context.Book.ToList(); 
-            ViewBag.BookId = new SelectList(books, "Id", "Title"); 
+            ViewBag.BookId = new SelectList(books, "Id", "Title");
+            var users = await _context.Users.ToListAsync();
+            ViewBag.AppUsers = new SelectList(users, "Id", "Name");
             return View(review);
+        }
+        //Get CreateReview
+        public async Task<IActionResult> CreateReview()
+        {
+            var currentUser = await _context.Users.SingleOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+            var books = await _context.UserBooks
+                                       .Include(b => b.Book)
+                                       .Where(b => b.AppUser == currentUser.Id)
+                                       .Select(b => new SelectListItem
+                                       {
+                                           Value = b.Id.ToString(),
+                                           Text = b.Book.Title
+                                       })
+                                       .ToListAsync();
+            var viewModel = new CreateReviewViewModel
+            {
+                Review = new Review(),
+                BoughtBooks = books,
+                User = currentUser
+            };
+            return View(viewModel);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateReview(CreateReviewViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                _context.Add(viewModel.Review);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(viewModel);
         }
 
         // GET: Reviews/Edit/5
@@ -90,8 +130,7 @@ namespace BookStore1.Controllers
         }
 
         // POST: Reviews/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,BookId,AppUser,Comment,Rating")] Review review)

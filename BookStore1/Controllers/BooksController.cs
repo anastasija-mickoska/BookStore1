@@ -11,20 +11,70 @@ using System.IO;
 using BookStore1.ViewModels;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
+using BookStore1.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Hosting;
 
 namespace BookStore1.Controllers
 {
     public class BooksController : Controller
     {
         private readonly BookStore1Context _context;
+        private readonly UserManager<BookStore1User> _userManager;
+        private readonly IWebHostEnvironment _environment;
 
-        public BooksController(BookStore1Context context, ILogger<BooksController> logger)
+        public BooksController(BookStore1Context context, UserManager<BookStore1User> userManager, IWebHostEnvironment environment)
         {
             _context = context;
+            _userManager = userManager;
+            _environment= environment;
 
         }
+        [HttpPost]
+        [Authorize(Roles="User")]
+        public async Task<IActionResult> BuyBook(int id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Challenge(); 
+            }
 
-        // GET: Books
+            var book = await _context.Book.FindAsync(id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            var userBook = new UserBooks
+            {
+                AppUser = user.Id, 
+                BookId = book.Id,
+            };
+
+            _context.UserBooks.Add(userBook);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(MyBooks));
+        }
+
+        [Authorize(Roles ="User")]
+        public async Task<IActionResult> MyBooks()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Challenge(); 
+            }
+
+            var userBooks = await _context.UserBooks
+                .Include(ub => ub.Book)
+                .Where(ub => ub.AppUser == user.Id) 
+                .ToListAsync();
+
+            return View(userBooks);
+        }
+    // GET: Books
         public async Task<IActionResult> Index(string searchstring)
         {
             IQueryable<Book> books = _context.Book.Include(m => m.Author).Include(m => m.Genres).ThenInclude(m => m.Genre).Include(m => m.Reviews);
@@ -94,7 +144,8 @@ namespace BookStore1.Controllers
         [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Create()
         {
-            ViewBag.Genres = new MultiSelectList(await _context.Genre.ToListAsync(), "Id", "GenreName");
+            var genres = await _context.Genre.ToListAsync();
+            ViewBag.Genres = new MultiSelectList(genres, "Id", "GenreName");
             ViewBag.AuthorId = new SelectList(await _context.Author.ToListAsync(), "Id", "FullName");
             return View();
         }
@@ -103,11 +154,30 @@ namespace BookStore1.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-public async Task<IActionResult> Create([Bind("Id,Title,YearPublished,NumPages,Description,Publisher,FrontPage,DownloadUrl,AuthorId")] Book book, int[] selected)
-{
+        public async Task<IActionResult> Create([Bind("Id,Title,YearPublished,NumPages,Description,Publisher,FrontPage,DownloadUrl,AuthorId")] Book book, int[] selected, IFormFile FrontPageFile, IFormFile DownloadUrlFile)
+        {
             if (!ModelState.IsValid) 
         {
-            _context.Add(book);
+                if (FrontPageFile != null)
+                {
+                    var frontPagePath = Path.Combine(_environment.WebRootPath, "uploads", FrontPageFile.FileName);
+                    using (var stream = new FileStream(frontPagePath, FileMode.Create))
+                    {
+                        await FrontPageFile.CopyToAsync(stream);
+                    }
+                    book.FrontPage = $"/uploads/{FrontPageFile.FileName}";
+                }
+
+                if (DownloadUrlFile != null)
+                {
+                    var downloadUrlPath = Path.Combine(_environment.WebRootPath, "uploads", DownloadUrlFile.FileName);
+                    using (var stream = new FileStream(downloadUrlPath, FileMode.Create))
+                    {
+                        await DownloadUrlFile.CopyToAsync(stream);
+                    }
+                    book.DownloadUrl = $"/uploads/{DownloadUrlFile.FileName}";
+                }
+                _context.Add(book);
                 if (selected != null)
                 {
                     foreach (var genreId in selected)
@@ -126,10 +196,9 @@ public async Task<IActionResult> Create([Bind("Id,Title,YearPublished,NumPages,D
             {
                 Text = genre.GenreName,
                 Value = genre.Id.ToString(),
-                Selected = book.Genres.Any(bg => bg.GenreId == genre.Id) // Check if the genre is associated with the book
+                Selected = book.Genres.Any(bg => bg.GenreId == genre.Id)
             }).ToList();
 
-            // Set ViewBag.Genres with the genreItems
             ViewBag.Genres = genreItems;
 
             return View(book);
@@ -161,9 +230,9 @@ public async Task<IActionResult> Create([Bind("Id,Title,YearPublished,NumPages,D
 
             ViewBag.Genres = genreItems;
 
-
             var authors = await _context.Author.ToListAsync();
             ViewBag.AuthorId = new SelectList(authors, "Id", "FullName");
+
             return View(book);
         }
 
@@ -171,7 +240,7 @@ public async Task<IActionResult> Create([Bind("Id,Title,YearPublished,NumPages,D
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,YearPublished,NumPages,Description,Publisher,FrontPage,DownloadUrl,AuthorId")] Book book, int[] selected, IFormFile frontPageFile, IFormFile downloadUrlFile)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,YearPublished,NumPages,Description,Publisher,FrontPage,DownloadUrl,AuthorId")] Book book, int[] selected, IFormFile FrontPageFile, IFormFile DownloadUrlFile)
         {
             if (id != book.Id)
             {
@@ -180,6 +249,26 @@ public async Task<IActionResult> Create([Bind("Id,Title,YearPublished,NumPages,D
 
             if (!ModelState.IsValid)
             {
+                if (FrontPageFile != null)
+                {
+                    var frontPagePath = Path.Combine(_environment.WebRootPath, "uploads", FrontPageFile.FileName);
+                    using (var stream = new FileStream(frontPagePath, FileMode.Create))
+                    {
+                        await FrontPageFile.CopyToAsync(stream);
+                    }
+                    book.FrontPage = $"/uploads/{FrontPageFile.FileName}";
+                }
+
+                if (DownloadUrlFile != null)
+                {
+                    var downloadUrlPath = Path.Combine(_environment.WebRootPath, "uploads", DownloadUrlFile.FileName);
+                    using (var stream = new FileStream(downloadUrlPath, FileMode.Create))
+                    {
+                        await DownloadUrlFile.CopyToAsync(stream);
+                    }
+                    book.DownloadUrl = $"/uploads/{DownloadUrlFile.FileName}";
+                }
+
                 try
                 {
                     var existingGenres = _context.BookGenre.Where(b => b.BookId == id);
@@ -233,7 +322,7 @@ public async Task<IActionResult> Create([Bind("Id,Title,YearPublished,NumPages,D
         }
 
         // POST: Books/Delete/5
-      //  [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

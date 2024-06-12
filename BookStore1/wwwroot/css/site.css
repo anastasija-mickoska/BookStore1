@@ -34,8 +34,8 @@ nav .navbar {
     height: 120px;
 }
 .nav-item, .navbar-brand {
-    margin-left: 3%;
-    margin-right: 3%;
+    margin-left: 2%;
+    margin-right: 2%;
     font-size: 1.5em;
 }
 
@@ -49,8 +49,7 @@ nav .navbar {
 .edit, .details, .delete, .back, .add, .search {
     border: none;
     padding: 10px;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-right:5px;
     color: white;
     border-radius: 5px;
 }
@@ -62,10 +61,15 @@ a {
 a:hover {
     color:black;
 }
-.edit, btn-primary, .search, .details {
+.edit, btn-primary, .search, .details, .buy {
     background-color: #75937e;
     color: white;
     border-radius: 5px;
+}
+.buy {
+    border:none;
+    padding:10px;
+    width:100%;
 }
 .add {
     background-color:#75937e;
@@ -88,7 +92,7 @@ h4 {
     position:relative;
     width:100%;
     float:left;
-    padding:5px;
+    padding:10px;
 }
 .buttons1 {
     width:40%;
@@ -115,16 +119,17 @@ input .add, back {
     border-radius:15px 15px 0 0;
 }
 .card-group {
-    width:30%;
+    width:27%;
     float:left;
     margin-left:3%;
+    margin-right:3%;
     margin-bottom:5%;
 }
 .card {
     border-radius:15px;
 }
 .booksIndex {
-    height:800px;
+    height:900px;
 }
 .reviewIndex {
     height:250px;
@@ -241,5 +246,13 @@ label {
 .bookNamePhoto {
     width:40%;
     margin-right:5%;
+    float:left;
+}
+.buyForm {
+    width:35%;
+    float:right;
+}
+.buyForm1 {
+    width:10%;
     float:left;
 }

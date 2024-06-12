@@ -1,0 +1,35 @@
+﻿@model IEnumerable<UserBooks>
+
+<h2>My Books</h2>
+<hr />
+
+    @foreach (var userBook in Model)
+    {
+    <div class="card-group booksIndex">
+        <div class="card">
+            <img class="card-img-top" src="@Html.DisplayFor(modelItem => userBook.Book.FrontPage)" alt="Book Front Page" height="400px" width="250px">
+            <div class="card-body">
+                <h5 class="card-title">
+                    @Html.DisplayFor(modelItem => userBook.Book.Title)
+                </h5>
+                <hr />
+                <p class="card-text">
+                    @Html.DisplayFor(modelItem => userBook.Book.Description)
+                </p>
+                <hr />
+                <p class="card-text">
+                    @Html.DisplayNameFor(modelItem => userBook.Book.YearPublished):
+                    @Html.DisplayFor(modelItem => userBook.Book.YearPublished)
+                </p>
+            </div>
+            <div class="buttons">
+                <button class="details"><a asp-action="Details" asp-route-id="@userBook.Book.Id">Details</a> </button>
+                <div class="buyForm">
+                    <form asp-action="CreateReview" asp-controller="Reviews" method="get">
+                        <button type="submit" class="add">Add review</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    }

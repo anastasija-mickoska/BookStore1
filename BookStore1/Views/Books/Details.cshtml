@@ -85,6 +85,12 @@
     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
     {
         <button class="edit"><a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a></button>
-    }    
+    }
+    <div class="buyForm1">
+        <form asp-action="BuyBook" method="post">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <button class="buy" type="submit">Buy book</button>
+        </form>
+    </div>
     <button class="back"><a asp-action="Index">Back to List</a></button>
 </div>

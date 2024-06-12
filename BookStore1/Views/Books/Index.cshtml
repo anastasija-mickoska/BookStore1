@@ -28,13 +28,16 @@
                 <h5 class="card-title">
                     @Html.DisplayFor(modelItem => item.Title)
                 </h5>
+                <hr />
                 <p class="card-text">
                     @Html.DisplayFor(modelItem => item.Description)
-                </p>
+                </p>               
+                <hr />
                 <p class="card-text">
                     @Html.DisplayNameFor(modelItem => item.YearPublished):
                     @Html.DisplayFor(modelItem => item.YearPublished)
                 </p>
+                <hr />
                 <p class="card-text">
                     @Html.DisplayNameFor(modelItem => item.Genres) :
                     @if (Model.Books != null)
@@ -61,7 +64,12 @@
                  }
                 @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
                 {
-                    <button class="add"><a asp-controller="MyBooks" asp-action="Index">Buy book</a></button>
+                    <div class="buyForm">
+                        <form asp-action="BuyBook" method="post">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <button class="buy" type="submit">Buy book</button>
+                        </form>
+                    </div>
                 }
                 </div>
         </div>
